@@ -1,0 +1,15 @@
+{
+    "name": "mi-aplicacion",
+    "version": "1.0.0",
+    "description": "Mi aplicación Node.js",
+    "dependencies": {
+      "express": "^4.17.1",
+      "mongoose": "^6.0.2",
+      "cors": "^2.8.5"
+     
+    },
+    "scripts": {
+      "start": "node app.js"
+    }
+  }
+  
