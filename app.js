@@ -2,9 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const cors = require('cors'); // Importa cors
+const cors = require('cors');
 
-// Conexión a MongoDB
 mongoose.connect('mongodb+srv://cesar:123@cluster0.viwhkiu.mongodb.net/dbiglesia', {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -13,35 +12,28 @@ mongoose.connect('mongodb+srv://cesar:123@cluster0.viwhkiu.mongodb.net/dbiglesia
   .catch(err => console.error('Error de conexión a MongoDB:', err));
 app.use(cors());
 
-
-
-
-
-// Modelo de usuario
 const Usuario = mongoose.model('Usuario', {
   nombre: String,
   nombreUsuario: String,
   contraseña: String
 });
 
-
-
-
-
-
-// Middleware para procesar datos JSON
 app.use(bodyParser.json());
 
-/// Ruta para registrar un usuario
-app.post('/registro', (req, res) => {
+app.post('/registro', async (req, res) => {
+  const nombreUsuarioExistente = await Usuario.findOne({ nombreUsuario: req.body.nombreUsuario });
+  const nombreExistente = await Usuario.findOne({ nombre: req.body.nombre });
+
+  if (nombreUsuarioExistente || nombreExistente) {
+    return res.status(409).json({ error: 'El nombre de usuario o el nombre ya existen' });
+  }
+
   const nuevoUsuario = new Usuario(req.body);
   nuevoUsuario.save()
-    .then(() => res.status(201).json({ message: 'Usuario registrado con éxito' })) // Respuesta JSON
-    .catch(err => res.status(400).json({ error: 'Error al registrar usuario: ' + err })); // Respuesta JSON
+    .then(() => res.status(201).json({ message: 'Usuario registrado con éxito' }))
+    .catch(err => res.status(400).json({ error: 'Error al registrar usuario: ' + err }));
 });
 
-
-// Iniciar el servidor
 const puerto = 3000;
 app.listen(puerto, () => {
   console.log(`Servidor en ejecución en http://localhost:${puerto}`);
