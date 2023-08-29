@@ -25,7 +25,12 @@ app.post('/registro', async (req, res) => {
   const nombreExistente = await Usuario.findOne({ nombre: req.body.nombre });
 
   if (nombreUsuarioExistente || nombreExistente) {
-    return res.status(409).json({ error: 'El nombre de usuario o el nombre ya existen' });
+    if (
+      (nombreUsuarioExistente && nombreUsuarioExistente.nombre === req.body.nombre) ||
+      (nombreExistente && nombreExistente.nombreUsuario === req.body.nombreUsuario)
+    ) {
+      return res.status(409).json({ error: 'El nombre de usuario o el nombre ya existen' });
+    }
   }
 
   const nuevoUsuario = new Usuario(req.body);
