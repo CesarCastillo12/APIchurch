@@ -12,12 +12,22 @@ mongoose.connect('mongodb+srv://cesar:123@cluster0.viwhkiu.mongodb.net/dbiglesia
   .then(() => console.log('Conexión a MongoDB exitosa'))
   .catch(err => console.error('Error de conexión a MongoDB:', err));
 app.use(cors());
+
+
+
+
+
 // Modelo de usuario
 const Usuario = mongoose.model('Usuario', {
   nombre: String,
-  correo: String,
+  nombreUsuario: String,
   contraseña: String
 });
+
+
+
+
+
 
 // Middleware para procesar datos JSON
 app.use(bodyParser.json());
