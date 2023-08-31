@@ -20,39 +20,32 @@ const Usuario = mongoose.model('Usuario', {
   contraseña: String
 });
 
+const Administrador = mongoose.model('Administrador', {
+  nombre: String,
+  nombreUsuario: String,
+  contraseña: String
+});
+
 app.post('/registro', async (req, res) => {
-  const { nombre, nombreUsuario } = req.body;
-
-  const nombreUsuarioExistente = await Usuario.findOne({ nombreUsuario });
-  const nombreExistente = await Usuario.findOne({ nombre });
-
-  if (nombreUsuarioExistente || nombreExistente) {
-    if (
-      (nombreUsuarioExistente && nombreUsuarioExistente.nombre === nombre) ||
-      (nombreExistente && nombreExistente.nombreUsuario === nombreUsuario)
-    ) {
-      return res.status(409).json({ error: 'El nombre de usuario o el nombre ya existen' });
-    }
-  }
-
-  const nuevoUsuario = new Usuario(req.body);
-  nuevoUsuario.save()
-    .then(() => res.status(201).json({ message: 'Usuario registrado con éxito' }))
-    .catch(err => res.status(400).json({ error: 'Error al registrar usuario: ' + err }));
+  // Código para registrar usuarios (ya proporcionado por ti)
 });
 
 app.post('/login', async (req, res) => {
-  const { nombreUsuario, contraseña } = req.body;
-  try {
-    const usuario = await Usuario.findOne({ nombreUsuario, contraseña });
-    if (usuario) {
-      res.status(200).json({ message: 'Inicio de sesión exitoso' });
-    } else {
-      res.status(401).json({ error: 'Credenciales incorrectas' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Error en el servidor' });
+  // Código para autenticación de usuarios (ya proporcionado por ti)
+});
+
+app.post('/agregar-administrador', async (req, res) => {
+  const { nombre, nombreUsuario, contraseña } = req.body;
+
+  const adminExistente = await Administrador.findOne({ nombreUsuario });
+  if (adminExistente) {
+    return res.status(409).json({ error: 'El nombre de usuario del administrador ya existe' });
   }
+
+  const nuevoAdministrador = new Administrador({ nombre, nombreUsuario, contraseña });
+  nuevoAdministrador.save()
+    .then(() => res.status(201).json({ message: 'Administrador agregado con éxito' }))
+    .catch(err => res.status(400).json({ error: 'Error al agregar administrador: ' + err }));
 });
 
 const puerto = 3000;
