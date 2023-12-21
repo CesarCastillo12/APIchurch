@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 
-mongoose.connect('mongodb+srv://cesar:123@cluster0.viwhkiu.mongodb.net/dbiglesia', {
+mongoose.connect('mongodb+srv://cesar:123@cluster0.sopkzh6.mongodb.net/dbiglesia', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
